@@ -1,0 +1,123 @@
+<div class="container" style="padding:10px;" *ngIf="!loading">
+
+    <!--Overview with dropdown filters-->
+    <div class="row" style="padding: 10px;">
+      
+
+            <div class="col-md" style="padding: 10px;">
+                    
+                  <button class="btn btn-primary" (click)="openModal()">Select Date Range</button>
+            </div>
+    
+            
+    </div>
+
+    <div class="row text-center" style="padding: 10px; margin-top: 10px; margin-bottom: 10px;">
+        <div class="col-sm-3">
+            <p>Total Number of Bookings</p>
+            <h5><strong>{{total_bookings}}</strong></h5>
+        </div>
+
+        <div class="col-sm-3">
+            <p>Total Revenue</p>
+            <h5><strong><span>R</span>{{total_revenue}}</strong></h5>
+        </div>
+
+        <div class="col-sm-3">
+            <p>Upcoming Bookings</p>
+            <h5><strong>{{upcoming_bookings}}</strong></h5>
+        </div>
+        <div class="col-sm-3">
+            <p>Completed Bookings</p>
+            <h5><strong>{{completed_bookings}}</strong></h5>
+        </div>
+    </div>
+
+    
+    <div class="row" style="padding: 10px; margin-top: 10px; margin-bottom: 10px;"> 
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Booking Name</th>
+                    <th>Payment Date</th>
+                    <th>Booking Start Date</th>
+                    <th>Booking End Date</th>
+                    <th>Payment Method</th>
+                    <th>Contact Number</th>
+                    <th>Booking Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let d of booking_table">
+                    <td>{{d.booking_id}}</td>
+                    <td>{{d.booking_name}}</td>
+                    <td>{{d.transaction_date}}</td>
+                    <td>{{d.booking_start_date}}</td>
+                    <td>{{d.booking_end_date}}</td>
+                    <td>{{d.transaction_type}}</td>
+                    <td>{{d.contact_number}}</td>
+                    <td>{{d.booking_amount}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+<div *ngIf="loading" class="text-center" style="padding: 10px">
+    <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<!--Filter By Date Modal -->
+<div
+  mdbModal #dateRange="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  aria-labelledby="dateRangeLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dateRangelLabel">Select Date Range</h5>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="dateRangeForm">
+
+            <div class="form-outline" style="margin-bottom: 15px;">
+                <label class="form-label" for="startdate"> Select Start Date</label>
+                <mdb-date-picker formControlName="StartDate"  name="startdate" [options]="myDatePickerOptions" [placeholder]="'Select Start Date'"  required></mdb-date-picker>
+            </div>
+
+            <div class="form-outline" style="margin-bottom: 15px;">
+                <label class="form-label" for="enddate"> Select End Date</label>
+                <mdb-date-picker formControlName="EndDate" name="enddate" [options]="myDatePickerOptions" [placeholder]="'Select End Date'" required></mdb-date-picker>
+            </div>
+            
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger"(click)="closeModal()">
+            <span><i class="fas fa-times" style="color: white"></i></span> Close
+        </button>
+        <button type="button" class="btn btn-primary"  *ngIf="!loading" [disabled]="!dateRangeForm.valid" (click)="filterByDate()"><span><i class="fas fa-check" style="color: white"></i></span> Apply</button>
+        <button class="btn btn-primary"  disabled *ngIf="loading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            Loading...
+          </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
